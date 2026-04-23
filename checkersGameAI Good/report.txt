@@ -1,0 +1,194 @@
+Intelligent Game Agent for Checkers (Draughts)
+Minimax Search with Alpha–Beta Pruning in a Browser-Based Application
+
+Course: Artificial Intelligence (Applied Programming Project)
+Student: ______________________
+Date: _________________________
+
+
+Abstract
+
+This project presents an intelligent game agent for the two-player, turn-based, perfect-information game of Checkers (Draughts). The system is implemented as a single-page web application in which a human player competes against an AI opponent. The AI’s decision-making is based on depth-limited minimax search with alpha–beta pruning to reduce the effective search space while preserving the optimal minimax choice under the explored horizon. A heuristic evaluation function is used at non-terminal cutoffs and combines (i) material advantage, (ii) king advantage, and (iii) a small positional term. A key correctness requirement in checkers is the treatment of multi-jump capture chains; therefore, capture sequences are modeled as complete “turn actions” in the AI game tree and are animated step-by-step in the user interface. The codebase is organized into modular JavaScript components separating rules, search, and UI control, enabling clear explanation and maintainability.
+
+Keywords: adversarial search, minimax, alpha–beta pruning, heuristic evaluation, perfect-information games, checkers
+
+
+1. Introduction
+
+Classical board games provide a well-scoped environment for demonstrating foundational AI ideas in a reproducible setting. Checkers is particularly suitable because it is deterministic, turn-based, and fully observable. In such domains, the central computational problem is action selection under an adversarial opponent: a move should be judged not only by its immediate effect, but also by the opponent’s best response and subsequent consequences.
+
+The objective of this project is to bridge theoretical AI concepts and practical software development by constructing a complete, playable checkers application and implementing an AI agent that selects moves using minimax search optimized via alpha–beta pruning.
+
+
+2. Problem Statement
+
+Given a checkers position on an 8×8 board, the task is to compute an AI move that maximizes the AI’s expected advantage assuming a rational opponent. The system must:
+1) enforce core movement and promotion rules (including kings),
+2) correctly handle capture moves and multi-jump chains,
+3) detect terminal states (win/loss by elimination or lack of legal actions), and
+4) provide an interactive user interface suitable for demonstration and reporting.
+
+
+3. Theoretical Background
+
+3.1 Game States and Game Trees
+
+Let s denote a game state (board configuration plus side to move). Legal actions from s define the successor function Result(s, a). The sequence of alternating decisions induces a game tree where:
+- nodes represent states,
+- edges represent legal actions,
+- depth represents the number of plies (half-moves) explored.
+
+Because the branching factor b varies with the position (and can be large when capture chains exist), an exhaustive search to terminal positions is generally infeasible in real-time settings; hence depth-limited search combined with evaluation is used.
+
+
+3.2 Minimax Search
+
+In a deterministic, zero-sum, perfect-information game, minimax formalizes optimal play under rational opponents.
+
+Let V(s, d) be the value of state s searched to depth d.
+
+Base cases:
+- If s is terminal: V(s, d) is assigned a large win/loss utility.
+- If d = 0: V(s, 0) = Eval(s), where Eval is a heuristic estimate.
+
+Recursive cases:
+- If the AI is to move (maximizer):
+  V(s, d) = max_{a in Actions(s)} V(Result(s, a), d − 1)
+- If the human is to move (minimizer):
+  V(s, d) = min_{a in Actions(s)} V(Result(s, a), d − 1)
+
+The root action with maximal value is selected by the AI.
+
+
+3.3 Alpha–Beta Pruning
+
+Minimax’s naive complexity is O(b^d), which can be too slow for interactive applications. Alpha–beta pruning accelerates minimax without changing its returned value by tracking bounds:
+- alpha: the best score currently guaranteed for the maximizer along the explored path,
+- beta: the best score currently guaranteed for the minimizer.
+
+When beta ≤ alpha at any node, further exploration of that branch cannot influence the final decision and can be pruned.
+
+Although the worst-case asymptotic bound remains O(b^d), alpha–beta often provides significant practical improvements, especially when the best moves are examined earlier.
+
+
+3.4 Heuristic Evaluation Function
+
+For non-terminal states at the depth limit, the system uses a heuristic evaluation function combining material and positional structure. In the current implementation (see ai.js), the primary terms are:
+- material: number of pieces,
+- kings: higher weight due to increased mobility,
+- positional: small bonus favoring advancement and development.
+
+Conceptually:
+Eval(s) = (2·AI_pieces + 3·AI_kings) − (2·H_pieces + 3·H_kings) + positional(s)
+
+This design is intentionally simple to maintain interpretability while remaining effective for demonstration.
+
+
+3.5 Multi-Jump Capture Chains as Turn Actions
+
+Checkers allows a single turn to include multiple captures by the same piece. This introduces a modeling pitfall: if each jump step were treated as a separate “turn” in the search tree, turn alternation and valuation would become incorrect.
+
+To address this, the AI move generator represents a full capture chain as one composite action containing:
+- a start square,
+- an ordered sequence of landing squares,
+- an ordered list of captured enemy squares.
+
+This ensures that a single player’s turn is simulated as one edge in the game tree, matching the game’s rules.
+
+
+4. Methodology and Implementation
+
+4.1 Search Configuration
+
+The AI uses a fixed “medium” configuration in ai.js:
+- depth = 3 (plies),
+- alpha–beta pruning enabled,
+- mild controlled randomness at the root (top-N selection and occasional random choice) to reduce repetitive, deterministic play while still grounded in minimax scores.
+
+This choice targets a balance between responsiveness and challenge in a browser environment.
+
+
+4.2 Terminal-State Handling
+
+Terminal states are detected when:
+- a player has zero pieces remaining, or
+- the side to move has no legal turn actions.
+
+Terminal utilities use large magnitude scores so that decisive outcomes dominate heuristic differences.
+
+
+4.3 Rule Engine and Action Application
+
+The rules engine in game.js provides the following core services:
+- board construction and cloning to avoid mutation during search,
+- generation of immediate moves and captures,
+- king promotion rules,
+- enumeration of complete turn actions for search (including capture chains),
+- application of actions to produce successor board states.
+
+The UI controller in main.js uses an action-based representation for the human as well, enabling “single-click chain capture” selection: when a piece can capture multiple times, the UI highlights final landing squares corresponding to complete capture sequences; the move is then executed and animated step-by-step.
+
+Note on capture policy: the AI action generator prefers capture actions when available (consistent with common checkers rules). For usability, the human interaction layer can expose both capture and non-capture options while still correctly executing capture chains when selected.
+
+
+5. System Architecture (Code Overview)
+
+The system is implemented as a single-page web application using HTML/CSS/Vanilla JavaScript modules.
+
+5.1 UI Layer
+- index.html: layout for control panel, board container, status messages, captured-piece counters, and winner modal.
+- style.css: board styling, piece rendering, highlights, modal display, and animations.
+
+5.2 Game Logic Layer (game.js)
+Primary responsibilities:
+- State representation (8×8 array of pieces or null)
+- Move generation: simple diagonals, capture moves, king movement
+- Promotion logic
+- Capture-chain enumeration (for AI)
+- Successor generation via action application
+- Winner detection and piece counting
+
+5.3 AI Layer (ai.js)
+Primary responsibilities:
+- Eval(s): heuristic scoring
+- minimax(s, d, alpha, beta): depth-limited search with pruning
+- chooseBestAiAction(s): root decision, including mild randomness
+
+5.4 Controller Layer (main.js)
+Primary responsibilities:
+- User input: piece selection and move execution
+- Highlighting legal actions and destinations
+- Scheduling AI turns and updating UI state
+- Animating moves (including multi-jump sequences)
+- Updating captured-piece counters and game-over modal
+
+
+6. Discussion
+
+6.1 Complexity Considerations
+
+Depth-limited minimax grows exponentially with depth d. Alpha–beta pruning improves effective performance by reducing explored nodes that cannot affect the result. In practice, the chosen depth (3 plies) is adequate for responsive browser gameplay and clearly demonstrates adversarial search in an academic setting.
+
+6.2 Design Trade-Offs
+
+The evaluation function is intentionally lightweight for explainability; deeper tactical patterns may not be fully captured at small depths. Controlled randomness is introduced to avoid repetitive gameplay and to produce a more “human-like” variety of moves at a medium difficulty level.
+
+
+7. Limitations and Future Work
+
+Potential improvements include:
+- transposition tables (state hashing) to reuse evaluations,
+- move ordering heuristics to increase alpha–beta pruning efficiency,
+- richer evaluation features such as mobility, central control, and king safety,
+- adaptive search depth based on game phase.
+
+
+8. Conclusion
+
+This project demonstrates a complete intelligent game agent for checkers implemented in a modular, browser-based application. By combining depth-limited minimax search with alpha–beta pruning and a transparent evaluation function, the system provides a concrete, explainable example of adversarial search suitable for an Artificial Intelligence course project. Correct handling of multi-jump capture chains as composite actions ensures rule-faithful simulation and improves both gameplay correctness and AI decision quality.
+
+
+References (General)
+
+1) S. Russell and P. Norvig, Artificial Intelligence: A Modern Approach.
+2) D. E. Knuth and R. W. Moore, “An Analysis of Alpha–Beta Pruning,” Artificial Intelligence.
