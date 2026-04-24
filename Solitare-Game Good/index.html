@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solitaire</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="game-title">Solitaire</h1>
+            <div class="game-info">
+                <div class="score-time">
+                    <span>Score: <strong id="score-value">0</strong></span>
+                    <span>Time: <strong id="time-value">00:00</strong></span>
+                </div>
+                <div class="controls">
+                    <button id="new-game" class="btn">New Game</button>
+                    <button id="hint" class="btn">Hint</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Board -->
+        <div class="game-board">
+            <!-- Stock, Waste, Foundations -->
+            <div class="top-area">
+                <div class="left-piles">
+                    <div class="pile-group">
+                        <div class="pile stock" id="stock">
+                            <div class="card back"></div>
+                        </div>
+                        <span>Stock</span>
+                    </div>
+                    <div class="pile-group">
+                        <div class="pile waste" id="waste"></div>
+                        <span>Waste</span>
+                    </div>
+                </div>
+                
+                <div class="foundations">
+                    <div class="pile foundation" id="foundation-0"></div>
+                    <div class="pile foundation" id="foundation-1"></div>
+                    <div class="pile foundation" id="foundation-2"></div>
+                    <div class="pile foundation" id="foundation-3"></div>
+                    <span>Foundations</span>
+                </div>
+            </div>
+
+            <!-- Tableau -->
+            <div class="tableau-area">
+                <div class="tableau-piles">
+                    <div class="pile tableau tableau-pile" id="tableau-0"></div>
+                    <div class="pile tableau tableau-pile" id="tableau-1"></div>
+                    <div class="pile tableau tableau-pile" id="tableau-2"></div>
+                    <div class="pile tableau tableau-pile" id="tableau-3"></div>
+                    <div class="pile tableau tableau-pile" id="tableau-4"></div>
+                    <div class="pile tableau tableau-pile" id="tableau-5"></div>
+                    <div class="pile tableau tableau-pile" id="tableau-6"></div>
+                </div>
+                <span>Tableau</span>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div id="message" class="message"></div>
+
+        <!-- Win Screen -->
+        <div id="win-screen" class="win-screen hidden">
+            <div class="win-content">
+                <h2>You Won! 🎉</h2>
+                <div class="win-stats">
+                    <p>Score: <strong id="final-score">0</strong></p>
+                    <p>Time: <strong id="final-time">00:00</strong></p>
+                </div>
+                <button id="play-again" class="btn">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="data-structures.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

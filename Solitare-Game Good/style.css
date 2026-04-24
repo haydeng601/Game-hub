@@ -1,0 +1,388 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: green;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 5px;
+    padding-top: 10px;
+}
+
+.game-container {
+    background: green;
+    max-width: 900px;
+    width: 100%;
+}
+
+/* Header - Compact layout */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 12px 15px;
+    background: green;
+    border-radius: 8px;
+    color: white;
+}
+
+.game-title {
+    font-size: 31px;
+    color: white;
+}
+
+.game-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.score-time {
+    display: flex;
+    gap: 15px;
+    font-size: 14px;
+    color: white;
+}
+
+.score-time strong {
+    color: yellow;
+}
+
+.controls {
+    display: flex;
+    gap: 6px;
+}
+
+.btn {
+    background: blue;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s;
+}
+
+.btn:hover:not(:disabled) {
+    background: #45a049;
+}
+
+.btn:disabled {
+    background: #667;
+    cursor: not-allowed;
+}
+
+/* Game Board - Compact spacing */
+.game-board {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Top Area */
+.top-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 5px;
+}
+
+.left-piles {
+    display: flex;
+    gap: 15px;
+}
+
+.pile-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: white;
+    font-size: 12px;
+}
+
+/* #stock{
+    color: #d32f2f;
+    background-color: #d32f2f;
+} */
+
+.foundations {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    position: relative;
+}
+
+.foundations span {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 12px;
+}
+
+/* Tableau Area */
+.tableau-area {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tableau-piles {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+}
+
+.tableau-area span {
+    color: white;
+    text-align: center;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+/* Piles */
+.pile {
+    width: 75px;
+    height: 105px;
+    border-radius: 5px;
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+.pile.empty {
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+}
+
+.pile.valid-drop {
+    border-color: #ffeb3b;
+    background: rgba(255, 235, 59, 0.1);
+}
+
+/* Foundation Piles - Locked cards */
+.foundation .card {
+    cursor: default;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.foundation .card:hover {
+    transform: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Cards */
+.card {
+    width: 75px;
+    height: 105px;
+    border-radius: 4px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 5px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    user-select: none;
+    background: white;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.back {
+    background: linear-gradient(135deg, red, #b71c1c);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.card.red {
+    color: #d32f2f;
+    border: 1px solid #e0e0e0;
+}
+
+.card.black {
+    color: #2c2c2c;
+    border: 1px solid #e0e0e0;
+}
+
+.card .top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 11px;
+    line-height: 1.1;
+}
+
+.card .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    font-size: 22px;
+}
+
+.card .bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    transform: rotate(180deg);
+    font-size: 11px;
+    line-height: 1.1;
+}
+
+/* Tableau Cards - Red back */
+.tableau .card.face-down {
+    background: linear-gradient(135deg, blue, green);
+    border: 2px solid grey;
+    cursor: default;
+}
+
+.tableau .card.face-down:hover {
+    transform: none;
+}
+
+.tableau .card.face-down .top,
+.tableau .card.face-down .center,
+.tableau .card.face-down .bottom {
+    display: none;
+}
+
+/* Waste Cards */
+.waste {
+    position: relative;
+    width: 130px;
+}
+
+.waste .card {
+    position: absolute;
+    top: 0;
+}
+
+.waste .card:nth-child(1) {
+    left: 0;
+    z-index: 1;
+}
+
+.waste .card:nth-child(2) {
+    left: 18px;
+    z-index: 2;
+}
+
+.waste .card:nth-child(3) {
+    left: 36px;
+    z-index: 3;
+}
+
+/* Dragging */
+.card.dragging {
+    opacity: 0.9;
+    transform: rotate(3deg) scale(1.05);
+    z-index: 1000;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Messages */
+.message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 14px;
+    text-align: center;
+    z-index: 2000;
+    display: none;
+}
+
+/* Win Screen */
+.win-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.win-screen.hidden {
+    display: none;
+}
+
+.win-content {
+    background: #15632f;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    color: white;
+    border: 2px solid #4caf50;
+}
+
+.win-content h2 {
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.win-stats {
+    margin: 15px 0;
+}
+
+.win-stats strong {
+    color: #ffeb3b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .game-info {
+        align-items: center;
+    }
+    
+    .pile {
+        width: 65px;
+        height: 91px;
+    }
+    
+    .card {
+        width: 65px;
+        height: 91px;
+    }
+    
+    .waste {
+        width: 110px;
+    }
+    
+    .waste .card:nth-child(2) {
+        left: 15px;
+    }
+    
+    .waste .card:nth-child(3) {
+        left: 30px;
+    }
+}
