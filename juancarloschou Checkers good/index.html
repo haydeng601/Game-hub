@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkers</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: darkslateblue;
+        }
+        #game-container {
+            display: flex;
+            align-items: center;
+        }
+		#menu-container {
+			margin-left: 20px;
+			width: 200px;
+		}
+        #start-btn {
+            margin-top: 20px; /* Add margin to the top to separate from the canvas */
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #turn-message {
+            margin-top: 10px; /* Add margin between the button and the message */
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas" width="600" height="600" style="border:1px solid #000000;"></canvas>
+	</div>
+    <div id="menu-container">
+        <div><button id="start-btn">Start</button></div>
+        <div id="turn-message">Turn</div>
+		<div>Pieces Player 1 (Blue): <label id="pieces-player1"></label></div>
+		<div>Pieces Player 2 (Green): <label id="pieces-player2"></label></div>
+    </div>
+	<audio id="start" src="snd/silence.mp3"></audio>
+	<audio id="move" src="snd/silence.mp3"></audio>
+	<audio id="eat" src="snd/silence.mp3"></audio>
+	<audio id="queen" src="snd/silence.mp3"></audio>
+	<audio id="gameOver" src="snd/silence.mp3"></audio>	
+    <script src="script.js"></script>
+</body>
+</html>
