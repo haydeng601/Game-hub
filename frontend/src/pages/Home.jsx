@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 function Home() {
   return (
     <div>
@@ -13,8 +14,8 @@ function Home() {
         </div>
 
         <nav>
-          <a href="#">Log in</a>
-          <a href="#">Sign Up</a>
+          <Link to="/login">Log in</Link>
+          <Link to="/signup">Sign Up</Link>
         </nav>
       </header>
 
