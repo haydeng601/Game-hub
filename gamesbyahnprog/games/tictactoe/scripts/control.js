@@ -28,6 +28,7 @@ $(".level").each(function() {
 $(".start").click(function() {
     var selectedDiffeculty = $('.selected').attr("id");
     if(typeof selectedDiffeculty !== "undefined") {
+        ui.hideEndActions();
         var aiPlayer = new AI(selectedDiffeculty);
         globals.game = new Game(aiPlayer);
 
@@ -61,3 +62,7 @@ $(".start").click(function() {
          }
      })
  });
+
+$(".restart-button").click(function() {
+    window.location.reload();
+});

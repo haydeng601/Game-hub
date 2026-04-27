@@ -1,53 +1,100 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Tic-Tac-Toe AI</title>
-        <link rel = 'stylesheet' type = 'text/css' href = 'styles/ui.css'>
-    </head>
-
-    <body>
-        <div class = 'main-container'>
-            <div class = 'board'>
-                <!-- data-indx following cell divs represents cell index in 1D array representation -->
-                <div class='cell' data-indx = "0" ></div>
-                <div class='cell' data-indx = "1" ></div>
-                <div class='cell' data-indx = "2" ></div>
-                <div class='cell' data-indx = "3" ></div>
-                <div class='cell' data-indx = "4" ></div>
-                <div class='cell' data-indx = "5" ></div>
-                <div class='cell' data-indx = "6" ></div>
-                <div class='cell' data-indx = "7" ></div>
-                <div class='cell' data-indx = "8" ></div>
-            </div>
-
-            <div class = 'control'>
-                <!-- div.intial displays the starting controls -->
-                <div class = 'intial'>
-                    <div class = 'difficulty'>
-                        <span class = 'level not-selected' id = "blind">Blind</span>
-                        <span class = 'level not-selected' id = "novice">Novice</span>
-                        <span class = 'level not-selected' id = "master">Master!</span>
-                    </div>
-
-                    <div class='start'> Start </div>
-                </div>
-
-                <!-- div.ingame displays in-game messages and controls -->
-                <div class = 'ingame' id="human">It's your turn ...</div>
-                <div class = 'ingame' id="ai">
-                    <img src = "imgs/robot.png" id = "robot" class = "robot" />
-                    <p>Waint for it ...</p>
-                </div>
-                <div class = 'ingame' id="won">You won !</div>
-                <div class = 'ingame' id="lost">You lost !</div>
-                <div class = 'ingame' id="draw">It's a Draw</div>
-            </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tic-Tac-Toe AI</title>
+    <link rel="stylesheet" href="../../css/header.css">
+    <link rel="stylesheet" href="styles/ui.css">
+</head>
+<body class="game-page">
+    <header>
+        <div class="logo" aria-label="GAME AHN">
+            <span class="logo-top">AHN</span>
+            <span class="logo-main" aria-hidden="true">
+                <span class="logo-letter letter-g">G</span>
+                <span class="logo-letter letter-a">A</span>
+                <span class="logo-letter letter-m">M</span>
+                <span class="logo-letter letter-e">E</span>
+            </span>
         </div>
 
-        <script src = "scripts/jquery-1.10.1.min.js"></script>
-        <script src = "scripts/ui.js"></script>
-        <script src = "scripts/game.js"></script>
-        <script src = "scripts/ai.js"></script>
-        <script src = "scripts/control.js"></script>
-    </body>
+        <nav>
+            <a href="#">Log in</a>
+            <a href="#">Sign Up</a>
+        </nav>
+    </header>
+
+    <main class="game-page-layout">
+        <section class="game-panel">
+            <div class="main-container">
+                <div class="board">
+                    <div class="cell" data-indx="0"></div>
+                    <div class="cell" data-indx="1"></div>
+                    <div class="cell" data-indx="2"></div>
+                    <div class="cell" data-indx="3"></div>
+                    <div class="cell" data-indx="4"></div>
+                    <div class="cell" data-indx="5"></div>
+                    <div class="cell" data-indx="6"></div>
+                    <div class="cell" data-indx="7"></div>
+                    <div class="cell" data-indx="8"></div>
+                </div>
+
+                <div class="control">
+                    <div class="intial">
+                        <div class="difficulty">
+                            <span class="level not-selected" id="blind">Blind</span>
+                            <span class="level not-selected" id="novice">Novice</span>
+                            <span class="level not-selected" id="master">Master</span>
+                        </div>
+
+                        <div class="start">Start</div>
+                    </div>
+
+                    <div class="ingame" id="human">It's your turn ...</div>
+                    <div class="ingame" id="ai">
+                        <img src="../image/robot.png" id="robot" class="robot" alt="Robot">
+                        <p>Wait for it ...</p>
+                    </div>
+                    <div class="ingame" id="won">You won !</div>
+                    <div class="ingame" id="lost">You lost !</div>
+                    <div class="ingame" id="draw">It's a Draw</div>
+
+                    <div class="end-actions">
+                        <a class="game-action-button" href="../../GAMESBYAHN.html">Home</a>
+                        <button class="game-action-button restart-button" type="button">Restart</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <aside class="page-side-games">
+        <h2 class="side-games-title">More Games</h2>
+        <div class="side-games-grid">
+            <a class="side-game-card current" href="../../GAMESBYAHN.html">
+                <span class="side-game-name">Tic-Tac-Toe</span>
+                <span class="side-game-status">Playing now</span>
+            </a>
+            <a class="side-game-card" href="../../GAMESBYAHN.html">
+                <span class="side-game-name">Next Drop</span>
+                <span class="side-game-status">Coming soon</span>
+            </a>
+            <a class="side-game-card" href="../../GAMESBYAHN.html">
+                <span class="side-game-name">Arcade Slot</span>
+                <span class="side-game-status">Coming soon</span>
+            </a>
+            <a class="side-game-card" href="../../GAMESBYAHN.html">
+                <span class="side-game-name">Puzzle Slot</span>
+                <span class="side-game-status">Coming soon</span>
+            </a>
+        </div>
+    </aside>
+
+    <script src="scripts/jquery-1.10.1.min.js"></script>
+    <script src="scripts/ui.js"></script>
+    <script src="scripts/game.js"></script>
+    <script src="scripts/ai.js"></script>
+    <script src="scripts/control.js"></script>
+</body>
 </html>

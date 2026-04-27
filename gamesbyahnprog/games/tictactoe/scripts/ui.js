@@ -28,6 +28,14 @@ ui.stopRobotFlickering = function() {
     clearInterval(ui.robotFlickeringHandle);
 };
 
+ui.showEndActions = function() {
+    $('.end-actions').fadeIn("fast").css("display", "flex");
+};
+
+ui.hideEndActions = function() {
+    $('.end-actions').hide();
+};
+
 /*
  * switchs the view on the UI depending on who's turn it switchs
  * @param turn [String]: the player to switch the view to
@@ -41,6 +49,11 @@ ui.switchViewTo = function(turn) {
 
         if(_turn === "ai")
             ui.startRobotFlickering();
+
+        if(_turn === "won" || _turn === "lost" || _turn === "draw")
+            ui.showEndActions();
+        else
+            ui.hideEndActions();
     }
 
     if(ui.intialControlsVisible) {
