@@ -29,10 +29,11 @@ function Login() {
     const data = await response.json();
 
     if (response.ok) {
-      setMessage(`Welcome, ${data.user.username}`);
-    } else {
-      setMessage(data.error || "Login failed.");
-    }
+  localStorage.setItem("user", JSON.stringify(data.user));
+  window.location.href = "/";
+} else {
+  setMessage(data.error || "Login failed.");
+}
   };
 
   return (

@@ -110,6 +110,30 @@ var State = function(old) {
  * Constructs a game object to be played
  * @param autoPlayer [AIPlayer] : the AI player to be play the game with
  */
+
+function saveGameResult(result) {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user) {
+    console.log("No logged-in user. Result not saved.");
+    return;
+  }
+
+  fetch("http://localhost:5001/game-result", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      userId: user.id,
+      gameName: "tictactoe",
+      result: result
+    })
+  })
+    .then((res) => res.json())
+    .then((data) => console.log("Saved game result:", data))
+    .catch((err) => console.error("Could not save game result:", err));
+}
 var Game = function(autoPlayer) {
 
     //public : initialize the ai player for this game
@@ -135,34 +159,39 @@ var Game = function(autoPlayer) {
      * @param _state [State]: the new state to advance the game to
      */
     this.advanceTo = function(_state) {
-        this.currentState = _state;
-        if(_state.isTerminal()) {
-            this.status = "ended";
+  this.currentState = _state;
 
-            if(_state.result === "X-won")
-                //X won
-                ui.switchViewTo("won");
-            else if(_state.result === "O-won")
-                //X lost
-                ui.switchViewTo("lost");
-            else
-                //it's a draw
-                ui.switchViewTo("draw");
-        }
-        else {
-            //the game is still running
+  if (_state.isTerminal()) {
+    this.status = "ended";
 
-            if(this.currentState.turn === "X") {
-                ui.switchViewTo("human");
-            }
-            else {
-                ui.switchViewTo("robot");
+    if (_state.result === "X-won") {
+      // X won
+      saveGameResult("win");
+      ui.switchViewTo("won");
+    } else if (_state.result === "O-won") {
+      // X lost
+      saveGameResult("loss");
+      ui.switchViewTo("lost");
+    } else {
+      // draw
+      saveGameResult("draw");
+      ui.switchViewTo("draw");
+    }
+    document.getElementById("play-again").style.display = "block";
 
-                //notify the AI player its turn has come up
-                this.ai.notify("O");
-            }
-        }
-    };
+  } else {
+    // the game is still running
+
+    if (this.currentState.turn === "X") {
+      ui.switchViewTo("human");
+    } else {
+      ui.switchViewTo("robot");
+
+      // notify the AI player its turn has come up
+      this.ai.notify("O");
+    }
+  }
+};
 
     /*
      * starts the game
@@ -196,3 +225,12 @@ Game.score = function(_state) {
         return 0;
     }
 }
+window.addEventListener("DOMContentLoaded", function () {
+  const btn = document.getElementById("play-again");
+
+  if (btn) {
+    btn.addEventListener("click", function () {
+      window.location.reload();
+    });
+  }
+});

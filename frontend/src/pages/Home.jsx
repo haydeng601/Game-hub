@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 function Home() {
+  const user = JSON.parse(localStorage.getItem("user"));
   return (
     <div>
       <header>
@@ -14,17 +15,34 @@ function Home() {
         </div>
 
         <nav>
-          <Link to="/login">Log in</Link>
-          <Link to="/signup">Sign Up</Link>
-        </nav>
+  {user ? (
+    <>
+      <span>Welcome, {user.username}</span>
+      <Link to="/dashboard">Dashboard</Link>
+      <button
+        onClick={() => {
+          localStorage.removeItem("user");
+          window.location.reload();
+        }}
+      >
+        Log Out
+      </button>
+    </>
+  ) : (
+    <>
+      <Link to="/login">Log in</Link>
+      <Link to="/signup">Sign Up</Link>
+    </>
+  )}
+</nav>
       </header>
 
       <main id="games-menu">
         <div className="game-grid">
-          <div className="game-card">
-            <img src="/images/tictactoe.jpg" alt="TTTcover" />
+          <a href="/games/tictactoe/index.html" className="game-card">
+            <img src="/games/tictactoe/imgs/robot.png" alt="TTTcover" />
             <div className="game-name">Tic-Tac-Toe</div>
-          </div>
+          </a>
 
           <div className="game-card"></div>
           <div className="game-card"></div>

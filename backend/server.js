@@ -29,7 +29,16 @@ db.run(`
     password TEXT NOT NULL
   )
 `);
-
+db.run(`
+  CREATE TABLE IF NOT EXISTS game_results (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    game_name TEXT NOT NULL,
+    result TEXT NOT NULL,
+    played_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  )
+`);
 app.get("/", (req, res) => {
   res.send("Backend is running.");
 });
@@ -88,6 +97,52 @@ app.post("/login", (req, res) => {
   });
 });
 
+app.post("/game-result", (req, res) => {
+  const { userId, gameName, result } = req.body;
+
+  if (!userId || !gameName || !result) {
+    return res.status(400).json({ error: "Missing game result data." });
+  }
+
+  db.run(
+    "INSERT INTO game_results (user_id, game_name, result) VALUES (?, ?, ?)",
+    [userId, gameName, result],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ error: "Could not save game result." });
+      }
+
+      res.json({
+        message: "Game result saved.",
+        resultId: this.lastID
+      });
+    }
+  );
+});
+
+app.get("/stats/:userId", (req, res) => {
+  const userId = req.params.userId;
+
+  db.all(
+    `
+    SELECT 
+      game_name,
+      result,
+      COUNT(*) as count
+    FROM game_results
+    WHERE user_id = ?
+    GROUP BY game_name, result
+    `,
+    [userId],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ error: "Could not get stats." });
+      }
+
+      res.json(rows);
+    }
+  );
+});
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

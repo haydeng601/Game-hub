@@ -46,7 +46,13 @@ $(".start").click(function() {
  $(".cell").each(function() {
      var $this = $(this);
      $this.click(function() {
-         if(globals.game.status === "running" && globals.game.currentState.turn === "X" && !$this.hasClass('occupied')) {
+         if (
+  globals.game &&
+  globals.game.status === "running" &&
+  globals.game.currentState &&
+  globals.game.currentState.turn === "X" &&
+  !$this.hasClass("occupied")
+) {
              var indx = parseInt($this.data("indx"));
 
              var next = new State(globals.game.currentState);
